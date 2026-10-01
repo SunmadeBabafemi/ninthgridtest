@@ -892,6 +892,22 @@ class UserService {
 			return code;
 		}
 	}
+
+	private async getUnusedOtpMongoDB1(): Promise<string> {
+		let code = String(verificationCode());
+		try {
+			let unusedOtp: string;
+			var existing = await OtpModel.findOne({ code });
+			while (existing !== null && existing !== undefined) {
+				code = String(verificationCode());
+				existing = await OtpModel.findOne({ code });
+			}
+			unusedOtp = code;
+			return unusedOtp;
+		} catch (error) {
+			return code;
+		}
+	}
 }
 
 export default UserService;
